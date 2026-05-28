@@ -12,16 +12,23 @@
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
     
+    <link rel="stylesheet" href="./katex/katex.min.css">
+    <script defer src="./katex/katex.min.js"></script>
+    <script defer src="./katex/contrib/auto-render.min.js" onload="renderMath()"></script>
     <script>
-    window.MathJax = {
-        options: {
-            enableMenu: false /* Эта строчка отключает всплывающее меню */
+        function renderMath() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '\\(', right: '\\)', display: false},
+                    {left: '\\[', right: '\\]', display: true},
+                    {left: '$', right: '$', display: false}
+                ],
+                throwOnError : false
+            });
         }
-    };
     </script>
     
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -31,7 +38,6 @@
             overflow-x: hidden;
         }
 
-        /* Кнопка Гамбургер (для мобильных) */
         .hamburger-btn {
             position: fixed;
             top: 20px;
@@ -56,7 +62,6 @@
             transition: 0.2s;
         }
 
-        /* Боковое меню с УСКОРЕННОЙ анимацией (0.2s) */
         .sidebar {
             position: fixed;
             top: 0;
@@ -87,7 +92,6 @@
             color: #5b9bd5;
         }
         
-        /* Затемнение заднего плана (для мобильных) */
         .overlay {
             position: fixed;
             top: 0;
@@ -105,7 +109,6 @@
             visibility: visible;
         }
 
-        /* Контент страницы */
         .content {
             max-width: 900px;
             margin: 80px auto 40px;
@@ -120,7 +123,6 @@
             color: #2c3e50;
         }
 
-        /* Адаптивность таблиц */
         .table-responsive {
             width: 100%;
             overflow-x: auto;
@@ -132,7 +134,7 @@
             border-collapse: collapse;
             text-align: center;
             font-size: 1.1em;
-            min-width: 550px; /* Предотвращает сплющивание формул */
+            min-width: 550px;
         }
         th, .col-num {
             background-color: #5b9bd5;
@@ -152,45 +154,21 @@
             font-style: italic;
         }
 
-        /* Анимация гамбургера в крестик */
-        .hamburger-btn.open span:nth-child(1) {
-            transform: translateY(7px) rotate(45deg);
-        }
-        .hamburger-btn.open span:nth-child(2) {
-            opacity: 0;
-        }
-        .hamburger-btn.open span:nth-child(3) {
-            transform: translateY(-7px) rotate(-45deg);
-        }
+        .hamburger-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .hamburger-btn.open span:nth-child(2) { opacity: 0; }
+        .hamburger-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-        /* Адаптивность для мобильных устройств */
         @media (max-width: 768px) {
-            .content {
-                padding: 15px;
-            }
-            table {
-                font-size: 1em;
-            }
-            th, .col-num, td {
-                padding: 8px;
-            }
+            .content { padding: 15px; }
+            table { font-size: 1em; }
+            th, .col-num, td { padding: 8px; }
         }
 
-        /* Адаптивность для ДЕСТКОПОВ (экраны от 992px) */
         @media (min-width: 992px) {
-            .hamburger-btn {
-                display: none; /* Прячем кнопку гамбургера */
-            }
-            .sidebar {
-                left: 0; /* Меню всегда открыто */
-            }
-            .overlay {
-                display: none; /* Убираем затемнение */
-            }
-            .content {
-                margin-left: 290px; /* Сдвигаем контент, чтобы меню его не перекрывало */
-                max-width: calc(100% - 330px);
-            }
+            .hamburger-btn { display: none; }
+            .sidebar { left: 0; }
+            .overlay { display: none; }
+            .content { margin-left: 290px; max-width: calc(100% - 330px); }
         }
     </style>
 </head>
