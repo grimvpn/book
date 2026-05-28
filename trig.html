@@ -12,16 +12,23 @@
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
 
+    <link rel="stylesheet" href="./katex/katex.min.css">
+    <script defer src="./katex/katex.min.js"></script>
+    <script defer src="./katex/contrib/auto-render.min.js" onload="renderMath()"></script>
     <script>
-    window.MathJax = {
-        options: {
-            enableMenu: false
+        function renderMath() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '\\(', right: '\\)', display: false},
+                    {left: '\\[', right: '\\]', display: true},
+                    {left: '$', right: '$', display: false}
+                ],
+                throwOnError : false
+            });
         }
-    };
     </script>
     
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 0; overflow-x: hidden; }
         .hamburger-btn { position: fixed; top: 20px; left: 20px; background: #2c3e50; color: white; border: none; border-radius: 8px; padding: 12px; cursor: pointer; z-index: 1000; display: flex; flex-direction: column; gap: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
@@ -35,7 +42,6 @@
         .content { max-width: 900px; margin: 80px auto 40px; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); transition: margin-left 0.2s ease-in-out; }
         h1 { text-align: center; color: #2c3e50; }
         
-        /* Стили для адаптивных таблиц */
         .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 20px; }
         table { width: 100%; border-collapse: collapse; text-align: center; font-size: 1.1em; min-width: 500px; }
         th, .col-num { background-color: #5b9bd5; color: white; border: 2px solid white; padding: 12px; }
