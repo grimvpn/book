@@ -15,7 +15,7 @@
     <script>
     window.MathJax = {
         options: {
-            enableMenu: false /* Эта строчка отключает всплывающее меню */
+            enableMenu: false
         }
     };
     </script>
@@ -34,20 +34,23 @@
         .overlay.open { opacity: 1; visibility: visible; }
         .content { max-width: 900px; margin: 80px auto 40px; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); transition: margin-left 0.2s ease-in-out; }
         h1 { text-align: center; color: #2c3e50; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; text-align: center; font-size: 1.1em; }
+        
+        /* Стили для адаптивных таблиц */
+        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 20px; }
+        table { width: 100%; border-collapse: collapse; text-align: center; font-size: 1.1em; min-width: 500px; }
         th, .col-num { background-color: #5b9bd5; color: white; border: 2px solid white; padding: 12px; }
         td { background-color: #faebd7; border: 2px solid white; padding: 12px; color: #000; }
+        
+        @media (max-width: 768px) {
+            .content { padding: 15px; }
+            table { font-size: 1em; }
+            th, .col-num, td { padding: 8px; }
+        }
+
         @media (min-width: 992px) { .hamburger-btn { display: none; } .sidebar { left: 0; } .overlay { display: none; } .content { margin-left: 290px; max-width: calc(100% - 330px); } }
-        /* Анимация гамбургера в крестик */
-        .hamburger-btn.open span:nth-child(1) {
-            transform: translateY(7px) rotate(45deg);
-        }
-        .hamburger-btn.open span:nth-child(2) {
-            opacity: 0;
-        }
-        .hamburger-btn.open span:nth-child(3) {
-            transform: translateY(-7px) rotate(-45deg);
-        }
+        .hamburger-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .hamburger-btn.open span:nth-child(2) { opacity: 0; }
+        .hamburger-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
     </style>
 </head>
 <body>
@@ -68,31 +71,34 @@
 
     <div class="content">
         <h1>Свойства логарифмов</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th style="width: 10%">№</th>
-                    <th style="width: 45%">Свойство</th>
-                    <th style="width: 45%">Формула</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td class="col-num">1.</td><td>Определение логарифма</td><td>\( \log_a b = c \iff a^c = b \)</td></tr>
-                <tr><td class="col-num">2.</td><td>Основное тождество</td><td>\( a^{\log_a b} = b \)</td></tr>
-                <tr><td class="col-num">3.</td><td>Логарифм произведения</td><td>\( \log_a (x \cdot y) = \log_a x + \log_a y \)</td></tr>
-                <tr><td class="col-num">4.</td><td>Логарифм частного</td><td>\( \log_a \left(\frac{x}{y}\right) = \log_a x - \log_a y \)</td></tr>
-                <tr><td class="col-num">5.</td><td>Вынос степени аргумента</td><td>\( \log_a (x^k) = k \log_a x \)</td></tr>
-                <tr><td class="col-num">6.</td><td>Вынос степени основания</td><td>\( \log_{a^c} x = \frac{1}{c} \log_a x \)</td></tr>
-                <tr><td class="col-num">7.</td><td>Переход к новому основанию</td><td>\( \log_a b = \frac{\log_c b}{\log_c a} \)</td></tr>
-            </tbody>
-        </table>
+        
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 10%">№</th>
+                        <th style="width: 45%">Свойство</th>
+                        <th style="width: 45%">Формула</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td class="col-num">1.</td><td>Определение логарифма</td><td>\( \log_a b = c \iff a^c = b \)</td></tr>
+                    <tr><td class="col-num">2.</td><td>Основное тождество</td><td>\( a^{\log_a b} = b \)</td></tr>
+                    <tr><td class="col-num">3.</td><td>Логарифм произведения</td><td>\( \log_a (x \cdot y) = \log_a x + \log_a y \)</td></tr>
+                    <tr><td class="col-num">4.</td><td>Логарифм частного</td><td>\( \log_a \left(\frac{x}{y}\right) = \log_a x - \log_a y \)</td></tr>
+                    <tr><td class="col-num">5.</td><td>Вынос степени аргумента</td><td>\( \log_a (x^k) = k \log_a x \)</td></tr>
+                    <tr><td class="col-num">6.</td><td>Вынос степени основания</td><td>\( \log_{a^c} x = \frac{1}{c} \log_a x \)</td></tr>
+                    <tr><td class="col-num">7.</td><td>Переход к новому основанию</td><td>\( \log_a b = \frac{\log_c b}{\log_c a} \)</td></tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <script>
         function toggleMenu() {
             document.getElementById('sidebar').classList.toggle('open');
             document.getElementById('overlay').classList.toggle('open');
-            document.getElementById('hamburger').classList.toggle('open'); // Добавили эту строку
+            document.getElementById('hamburger').classList.toggle('open');
         }
     </script>
 </body>
