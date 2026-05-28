@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тригонометрия | Математика</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        /* CSS точно такой же для сохранения однотипности */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 0; overflow-x: hidden; }
+        .hamburger-btn { position: fixed; top: 20px; left: 20px; background: #2c3e50; color: white; border: none; border-radius: 8px; padding: 12px; cursor: pointer; z-index: 1000; display: flex; flex-direction: column; gap: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .hamburger-btn span { display: block; width: 25px; height: 3px; background-color: white; transition: 0.2s; }
+        .sidebar { position: fixed; top: 0; left: -260px; width: 260px; height: 100%; background-color: #2c3e50; padding-top: 80px; transition: left 0.2s ease-in-out; z-index: 999; box-shadow: 2px 0 10px rgba(0,0,0,0.2); }
+        .sidebar.open { left: 0; }
+        .sidebar a { display: block; color: white; padding: 15px 25px; text-decoration: none; font-size: 1.1em; border-bottom: 1px solid #34495e; transition: 0.2s; }
+        .sidebar a:hover { background-color: #34495e; padding-left: 32px; color: #5b9bd5; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); opacity: 0; visibility: hidden; transition: 0.2s; z-index: 998; }
+        .overlay.open { opacity: 1; visibility: visible; }
+        .content { max-width: 900px; margin: 80px auto 40px; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); transition: margin-left 0.2s ease-in-out; }
+        h1 { text-align: center; color: #2c3e50; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; text-align: center; font-size: 1.1em; }
+        th, .col-num { background-color: #5b9bd5; color: white; border: 2px solid white; padding: 12px; }
+        td { background-color: #faebd7; border: 2px solid white; padding: 12px; color: #000; }
+        @media (min-width: 992px) { .hamburger-btn { display: none; } .sidebar { left: 0; } .overlay { display: none; } .content { margin-left: 290px; max-width: calc(100% - 330px); } }
+    </style>
+</head>
+<body>
+
+    <button class="hamburger-btn" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+    </button>
+
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+    <nav class="sidebar" id="sidebar">
+        <a href="index.html">⬅ На главную</a>
+        <a href="tpand.html">Производные</a>
+        <a href="trig.html" style="background-color: #34495e; color: #5b9bd5;">Тригонометрия</a>
+        <a href="log.html">Логарифмы</a>
+        <a href="geom.html">Геометрические формулы</a>
+    </nav>
+
+    <div class="content">
+        <h1>Основные тригонометрические формулы</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 10%">№</th>
+                    <th style="width: 45%">Название формулы</th>
+                    <th style="width: 45%">Формула</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td class="col-num">1.</td><td>Основное тождество</td><td>\( \sin^2 x + \cos^2 x = 1 \)</td></tr>
+                <tr><td class="col-num">2.</td><td>Тангенс угла</td><td>\( \operatorname{tg} x = \frac{\sin x}{\cos x} \)</td></tr>
+                <tr><td class="col-num">3.</td><td>Котангенс угла</td><td>\( \operatorname{ctg} x = \frac{\cos x}{\sin x} \)</td></tr>
+                <tr><td class="col-num">4.</td><td>Связь тангенса и котангенса</td><td>\( \operatorname{tg} x \cdot \operatorname{ctg} x = 1 \)</td></tr>
+                <tr><td class="col-num">5.</td><td>Синус двойного угла</td><td>\( \sin 2x = 2\sin x \cos x \)</td></tr>
+                <tr><td class="col-num">6.</td><td>Косинус двойного угла</td><td>\( \cos 2x = \cos^2 x - \sin^2 x \)</td></tr>
+                <tr><td class="col-num">7.</td><td>Тангенс двойного угла</td><td>\( \operatorname{tg} 2x = \frac{2\operatorname{tg} x}{1 - \operatorname{tg}^2 x} \)</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('open');
+        }
+    </script>
+</body>
+</html>
