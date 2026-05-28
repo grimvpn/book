@@ -15,7 +15,7 @@
     <script>
     window.MathJax = {
         options: {
-            enableMenu: false /* Эта строчка отключает всплывающее меню */
+            enableMenu: false
         }
     };
     </script>
@@ -23,7 +23,6 @@
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
-        /* CSS точно такой же для сохранения однотипности */
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 0; overflow-x: hidden; }
         .hamburger-btn { position: fixed; top: 20px; left: 20px; background: #2c3e50; color: white; border: none; border-radius: 8px; padding: 12px; cursor: pointer; z-index: 1000; display: flex; flex-direction: column; gap: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
         .hamburger-btn span { display: block; width: 25px; height: 3px; background-color: white; transition: 0.2s; }
@@ -35,20 +34,23 @@
         .overlay.open { opacity: 1; visibility: visible; }
         .content { max-width: 900px; margin: 80px auto 40px; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); transition: margin-left 0.2s ease-in-out; }
         h1 { text-align: center; color: #2c3e50; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; text-align: center; font-size: 1.1em; }
+        
+        /* Стили для адаптивных таблиц */
+        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 20px; }
+        table { width: 100%; border-collapse: collapse; text-align: center; font-size: 1.1em; min-width: 500px; }
         th, .col-num { background-color: #5b9bd5; color: white; border: 2px solid white; padding: 12px; }
         td { background-color: #faebd7; border: 2px solid white; padding: 12px; color: #000; }
+        
+        @media (max-width: 768px) {
+            .content { padding: 15px; }
+            table { font-size: 1em; }
+            th, .col-num, td { padding: 8px; }
+        }
+
         @media (min-width: 992px) { .hamburger-btn { display: none; } .sidebar { left: 0; } .overlay { display: none; } .content { margin-left: 290px; max-width: calc(100% - 330px); } }
-        /* Анимация гамбургера в крестик */
-        .hamburger-btn.open span:nth-child(1) {
-            transform: translateY(7px) rotate(45deg);
-        }
-        .hamburger-btn.open span:nth-child(2) {
-            opacity: 0;
-        }
-        .hamburger-btn.open span:nth-child(3) {
-            transform: translateY(-7px) rotate(-45deg);
-        }
+        .hamburger-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .hamburger-btn.open span:nth-child(2) { opacity: 0; }
+        .hamburger-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
     </style>
 </head>
 <body>
@@ -69,31 +71,34 @@
 
     <div class="content">
         <h1>Основные тригонометрические формулы</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th style="width: 10%">№</th>
-                    <th style="width: 45%">Название формулы</th>
-                    <th style="width: 45%">Формула</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td class="col-num">1.</td><td>Основное тождество</td><td>\( \sin^2 x + \cos^2 x = 1 \)</td></tr>
-                <tr><td class="col-num">2.</td><td>Тангенс угла</td><td>\( \operatorname{tg} x = \frac{\sin x}{\cos x} \)</td></tr>
-                <tr><td class="col-num">3.</td><td>Котангенс угла</td><td>\( \operatorname{ctg} x = \frac{\cos x}{\sin x} \)</td></tr>
-                <tr><td class="col-num">4.</td><td>Связь тангенса и котангенса</td><td>\( \operatorname{tg} x \cdot \operatorname{ctg} x = 1 \)</td></tr>
-                <tr><td class="col-num">5.</td><td>Синус двойного угла</td><td>\( \sin 2x = 2\sin x \cos x \)</td></tr>
-                <tr><td class="col-num">6.</td><td>Косинус двойного угла</td><td>\( \cos 2x = \cos^2 x - \sin^2 x \)</td></tr>
-                <tr><td class="col-num">7.</td><td>Тангенс двойного угла</td><td>\( \operatorname{tg} 2x = \frac{2\operatorname{tg} x}{1 - \operatorname{tg}^2 x} \)</td></tr>
-            </tbody>
-        </table>
+        
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 10%">№</th>
+                        <th style="width: 45%">Название формулы</th>
+                        <th style="width: 45%">Формула</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td class="col-num">1.</td><td>Основное тождество</td><td>\( \sin^2 x + \cos^2 x = 1 \)</td></tr>
+                    <tr><td class="col-num">2.</td><td>Тангенс угла</td><td>\( \operatorname{tg} x = \frac{\sin x}{\cos x} \)</td></tr>
+                    <tr><td class="col-num">3.</td><td>Котангенс угла</td><td>\( \operatorname{ctg} x = \frac{\cos x}{\sin x} \)</td></tr>
+                    <tr><td class="col-num">4.</td><td>Связь тангенса и котангенса</td><td>\( \operatorname{tg} x \cdot \operatorname{ctg} x = 1 \)</td></tr>
+                    <tr><td class="col-num">5.</td><td>Синус двойного угла</td><td>\( \sin 2x = 2\sin x \cos x \)</td></tr>
+                    <tr><td class="col-num">6.</td><td>Косинус двойного угла</td><td>\( \cos 2x = \cos^2 x - \sin^2 x \)</td></tr>
+                    <tr><td class="col-num">7.</td><td>Тангенс двойного угла</td><td>\( \operatorname{tg} 2x = \frac{2\operatorname{tg} x}{1 - \operatorname{tg}^2 x} \)</td></tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <script>
         function toggleMenu() {
             document.getElementById('sidebar').classList.toggle('open');
             document.getElementById('overlay').classList.toggle('open');
-            document.getElementById('hamburger').classList.toggle('open'); // Добавили эту строку
+            document.getElementById('hamburger').classList.toggle('open');
         }
     </script>
 </body>
