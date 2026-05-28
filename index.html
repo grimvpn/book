@@ -119,7 +119,7 @@
     </div>
 
     <button class="theme-toggle-btn-index" id="themeToggle" onclick="toggleTheme()">
-        🌙 Тёмная тема
+        🌙
     </button>
 
     <script>
@@ -127,7 +127,7 @@
         
         if (localStorage.getItem('theme') === 'dark') {
             document.body.classList.add('dark-theme');
-            themeBtn.innerHTML = '☀️ Светлая тема';
+            themeBtn.innerHTML = '☀️';
         }
 
         function toggleTheme() {
@@ -136,10 +136,10 @@
             
             if (body.classList.contains('dark-theme')) {
                 localStorage.setItem('theme', 'dark');
-                themeBtn.innerHTML = '☀️ Светлая тема';
+                themeBtn.innerHTML = '☀️';
             } else {
                 localStorage.setItem('theme', 'light');
-                themeBtn.innerHTML = '🌙 Тёмная тема';
+                themeBtn.innerHTML = '🌙';
             }
         }
     </script>
