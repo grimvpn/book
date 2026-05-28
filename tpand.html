@@ -120,13 +120,19 @@
             color: #2c3e50;
         }
 
-        /* Таблица формул */
+        /* Адаптивность таблиц */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin-top: 20px;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
             text-align: center;
             font-size: 1.1em;
+            min-width: 550px; /* Предотвращает сплющивание формул */
         }
         th, .col-num {
             background-color: #5b9bd5;
@@ -155,6 +161,19 @@
         }
         .hamburger-btn.open span:nth-child(3) {
             transform: translateY(-7px) rotate(-45deg);
+        }
+
+        /* Адаптивность для мобильных устройств */
+        @media (max-width: 768px) {
+            .content {
+                padding: 15px;
+            }
+            table {
+                font-size: 1em;
+            }
+            th, .col-num, td {
+                padding: 8px;
+            }
         }
 
         /* Адаптивность для ДЕСТКОПОВ (экраны от 992px) */
@@ -193,52 +212,55 @@
 
     <div class="content">
         <h1>Таблица производных и первообразных</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>№</th>
-                    <th>Производная</th>
-                    <th>Функция</th>
-                    <th>Первообразная</th>
-                </tr>
-                <tr class="subheader">
-                    <th class="col-num"></th>
-                    <th>\( f'(x) \)</th>
-                    <th>\( f(x) \)</th>
-                    <th>\( F(x) \)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td class="col-num">1.</td><td>\( 0 \)</td><td>\( C \)</td><td>\( Cx \)</td></tr>
-                <tr><td class="col-num">2.</td><td>\( 1 \)</td><td>\( x \)</td><td>\( \frac{x^2}{2} \)</td></tr>
-                <tr><td class="col-num">3.</td><td>\( n x^{n-1} \)</td><td>\( x^n \)</td><td>\( \frac{x^{n+1}}{n+1}, \; n \neq -1 \)</td></tr>
-                <tr><td class="col-num">4.</td><td>\( \frac{1}{2\sqrt{x}} \)</td><td>\( \sqrt{x} \)</td><td>\( * \)</td></tr>
-                <tr><td class="col-num">5.</td><td>\( -\frac{1}{x^2} \)</td><td>\( \frac{1}{x} \)</td><td>\( \ln x \)</td></tr>
-                <tr><td class="col-num">6.</td><td>\( e^x \)</td><td>\( e^x \)</td><td>\( e^x \)</td></tr>
-                <tr><td class="col-num">7.</td><td>\( a^x \ln a \)</td><td>\( a^x \)</td><td>\( \frac{a^x}{\ln a} \)</td></tr>
-                <tr><td class="col-num">8.</td><td>\( \frac{1}{x} \)</td><td>\( \ln x \)</td><td>\( * \)</td></tr>
-                <tr><td class="col-num">9.</td><td>\( \frac{1}{x \ln a} \)</td><td>\( \log_a x \)</td><td>\( * \)</td></tr>
-                <tr><td class="col-num">10.</td><td>\( \cos x \)</td><td>\( \sin x \)</td><td>\( -\cos x \)</td></tr>
-                <tr><td class="col-num">11.</td><td>\( -\sin x \)</td><td>\( \cos x \)</td><td>\( \sin x \)</td></tr>
-                <tr><td class="col-num">12.</td><td>\( \frac{1}{\cos^2 x} \)</td><td>\( \operatorname{tg} x \)</td><td>\( * \)</td></tr>
-                <tr><td class="col-num">13.</td><td>\( * \)</td><td>\( \frac{1}{\cos^2 x} \)</td><td>\( \operatorname{tg} x \)</td></tr>
-                <tr><td class="col-num">14.</td><td>\( -\frac{1}{\sin^2 x} \)</td><td>\( \operatorname{ctg} x \)</td><td>\( * \)</td></tr>
-                <tr><td class="col-num">15.</td><td>\( * \)</td><td>\( \frac{1}{\sin^2 x} \)</td><td>\( -\operatorname{ctg} x \)</td></tr>
-                <tr><td class="col-num">16.</td><td>\( \frac{1}{\sqrt{1 - x^2}} \)</td><td>\( \arcsin x \)</td><td>\( * \)</td></tr>
-                <tr><td class="col-num">17.</td><td>\( * \)</td><td>\( \frac{1}{\sqrt{1 - x^2}} \)</td><td>\( \arcsin x \)</td></tr>
-                <tr><td class="col-num">18.</td><td>\( -\frac{1}{\sqrt{1 - x^2}} \)</td><td>\( \arccos x \)</td><td>\( * \)</td></tr>
-                <tr><td class="col-num">19.</td><td>\( \frac{1}{1 + x^2} \)</td><td>\( \operatorname{arctg} x \)</td><td>\( * \)</td></tr>
-                <tr><td class="col-num">20.</td><td>\( * \)</td><td>\( \frac{1}{1 + x^2} \)</td><td>\( \operatorname{arctg} x \)</td></tr>
-                <tr><td class="col-num">21.</td><td>\( -\frac{1}{1 + x^2} \)</td><td>\( \operatorname{arcctg} x \)</td><td>\( * \)</td></tr>
-            </tbody>
-        </table>
+        
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>№</th>
+                        <th>Производная</th>
+                        <th>Функция</th>
+                        <th>Первообразная</th>
+                    </tr>
+                    <tr class="subheader">
+                        <th class="col-num"></th>
+                        <th>\( f'(x) \)</th>
+                        <th>\( f(x) \)</th>
+                        <th>\( F(x) \)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td class="col-num">1.</td><td>\( 0 \)</td><td>\( C \)</td><td>\( Cx \)</td></tr>
+                    <tr><td class="col-num">2.</td><td>\( 1 \)</td><td>\( x \)</td><td>\( \frac{x^2}{2} \)</td></tr>
+                    <tr><td class="col-num">3.</td><td>\( n x^{n-1} \)</td><td>\( x^n \)</td><td>\( \frac{x^{n+1}}{n+1}, \; n \neq -1 \)</td></tr>
+                    <tr><td class="col-num">4.</td><td>\( \frac{1}{2\sqrt{x}} \)</td><td>\( \sqrt{x} \)</td><td>\( * \)</td></tr>
+                    <tr><td class="col-num">5.</td><td>\( -\frac{1}{x^2} \)</td><td>\( \frac{1}{x} \)</td><td>\( \ln x \)</td></tr>
+                    <tr><td class="col-num">6.</td><td>\( e^x \)</td><td>\( e^x \)</td><td>\( e^x \)</td></tr>
+                    <tr><td class="col-num">7.</td><td>\( a^x \ln a \)</td><td>\( a^x \)</td><td>\( \frac{a^x}{\ln a} \)</td></tr>
+                    <tr><td class="col-num">8.</td><td>\( \frac{1}{x} \)</td><td>\( \ln x \)</td><td>\( * \)</td></tr>
+                    <tr><td class="col-num">9.</td><td>\( \frac{1}{x \ln a} \)</td><td>\( \log_a x \)</td><td>\( * \)</td></tr>
+                    <tr><td class="col-num">10.</td><td>\( \cos x \)</td><td>\( \sin x \)</td><td>\( -\cos x \)</td></tr>
+                    <tr><td class="col-num">11.</td><td>\( -\sin x \)</td><td>\( \cos x \)</td><td>\( \sin x \)</td></tr>
+                    <tr><td class="col-num">12.</td><td>\( \frac{1}{\cos^2 x} \)</td><td>\( \operatorname{tg} x \)</td><td>\( * \)</td></tr>
+                    <tr><td class="col-num">13.</td><td>\( * \)</td><td>\( \frac{1}{\cos^2 x} \)</td><td>\( \operatorname{tg} x \)</td></tr>
+                    <tr><td class="col-num">14.</td><td>\( -\frac{1}{\sin^2 x} \)</td><td>\( \operatorname{ctg} x \)</td><td>\( * \)</td></tr>
+                    <tr><td class="col-num">15.</td><td>\( * \)</td><td>\( \frac{1}{\sin^2 x} \)</td><td>\( -\operatorname{ctg} x \)</td></tr>
+                    <tr><td class="col-num">16.</td><td>\( \frac{1}{\sqrt{1 - x^2}} \)</td><td>\( \arcsin x \)</td><td>\( * \)</td></tr>
+                    <tr><td class="col-num">17.</td><td>\( * \)</td><td>\( \frac{1}{\sqrt{1 - x^2}} \)</td><td>\( \arcsin x \)</td></tr>
+                    <tr><td class="col-num">18.</td><td>\( -\frac{1}{\sqrt{1 - x^2}} \)</td><td>\( \arccos x \)</td><td>\( * \)</td></tr>
+                    <tr><td class="col-num">19.</td><td>\( \frac{1}{1 + x^2} \)</td><td>\( \operatorname{arctg} x \)</td><td>\( * \)</td></tr>
+                    <tr><td class="col-num">20.</td><td>\( * \)</td><td>\( \frac{1}{1 + x^2} \)</td><td>\( \operatorname{arctg} x \)</td></tr>
+                    <tr><td class="col-num">21.</td><td>\( -\frac{1}{1 + x^2} \)</td><td>\( \operatorname{arcctg} x \)</td><td>\( * \)</td></tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <script>
         function toggleMenu() {
             document.getElementById('sidebar').classList.toggle('open');
             document.getElementById('overlay').classList.toggle('open');
-            document.getElementById('hamburger').classList.toggle('open'); // Добавили эту строку
+            document.getElementById('hamburger').classList.toggle('open');
         }
     </script>
 </body>
