@@ -31,11 +31,21 @@
         th, .col-num { background-color: #5b9bd5; color: white; border: 2px solid white; padding: 12px; }
         td { background-color: #faebd7; border: 2px solid white; padding: 12px; color: #000; }
         @media (min-width: 992px) { .hamburger-btn { display: none; } .sidebar { left: 0; } .overlay { display: none; } .content { margin-left: 290px; max-width: calc(100% - 330px); } }
+        /* Анимация гамбургера в крестик */
+        .hamburger-btn.open span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+        .hamburger-btn.open span:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger-btn.open span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
     </style>
 </head>
 <body>
 
-    <button class="hamburger-btn" onclick="toggleMenu()">
+    <button class="hamburger-btn" id="hamburger" onclick="toggleMenu()">
         <span></span><span></span><span></span>
     </button>
 
@@ -75,6 +85,7 @@
         function toggleMenu() {
             document.getElementById('sidebar').classList.toggle('open');
             document.getElementById('overlay').classList.toggle('open');
+            document.getElementById('hamburger').classList.toggle('open'); // Добавили эту строку
         }
     </script>
 </body>
