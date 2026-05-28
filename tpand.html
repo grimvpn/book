@@ -139,6 +139,17 @@
             font-style: italic;
         }
 
+        /* Анимация гамбургера в крестик */
+        .hamburger-btn.open span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+        .hamburger-btn.open span:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger-btn.open span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
         /* Адаптивность для ДЕСТКОПОВ (экраны от 992px) */
         @media (min-width: 992px) {
             .hamburger-btn {
@@ -159,7 +170,7 @@
 </head>
 <body>
 
-    <button class="hamburger-btn" onclick="toggleMenu()">
+    <button class="hamburger-btn" id="hamburger" onclick="toggleMenu()">
         <span></span><span></span><span></span>
     </button>
 
@@ -220,6 +231,7 @@
         function toggleMenu() {
             document.getElementById('sidebar').classList.toggle('open');
             document.getElementById('overlay').classList.toggle('open');
+            document.getElementById('hamburger').classList.toggle('open'); // Добавили эту строку
         }
     </script>
 </body>
