@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор | Математика</title>
+
+    <meta property="og:title" content="Калькулятор" />
+    <meta property="og:type" content="website" />
+
+    <link rel="stylesheet" href="./katex/katex.min.css">
+    <script defer src="./katex/katex.min.js"></script>
+    <script defer src="./katex/contrib/auto-render.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.8.0/math.min.js"></script>
+
+    <style>
+        /* Базовые стили из твоего проекта */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 0; overflow-x: hidden; }
+        .hamburger-btn { position: fixed; top: 20px; left: 20px; background: #2c3e50; color: white; border: none; border-radius: 8px; padding: 12px; cursor: pointer; z-index: 1000; display: flex; flex-direction: column; gap: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .hamburger-btn span { display: block; width: 25px; height: 3px; background-color: white; transition: 0.2s; }
+        .sidebar { position: fixed; top: 0; left: -260px; width: 260px; height: 100%; background-color: #2c3e50; padding-top: 80px; transition: left 0.2s ease-in-out; z-index: 999; box-shadow: 2px 0 10px rgba(0,0,0,0.2); display: flex; flex-direction: column; box-sizing: border-box; overflow-y: auto; }
+        .sidebar.open { left: 0; }
+        .sidebar a { display: block; color: white; padding: 15px 25px; text-decoration: none; font-size: 1.1em; border-bottom: 1px solid #34495e; transition: 0.2s; flex-shrink: 0; }
+        .sidebar a:hover { background-color: #34495e; padding-left: 32px; color: #5b9bd5; }
+        .sidebar::-webkit-scrollbar { width: 5px; }
+        .sidebar::-webkit-scrollbar-track { background: #2c3e50; }
+        .sidebar::-webkit-scrollbar-thumb { background: #5b9bd5; border-radius: 10px; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); opacity: 0; visibility: hidden; transition: 0.2s; z-index: 998; }
+        .overlay.open { opacity: 1; visibility: visible; }
+        .content { max-width: 900px; margin: 80px auto 40px; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); transition: margin-left 0.2s ease-in-out; }
+        h1 { text-align: center; color: #2c3e50; }
+
+        @media (max-width: 768px) { .content { padding: 15px; margin-top: 70px; } }
+        @media (min-width: 992px) { .hamburger-btn { display: none; } .sidebar { left: 0; } .overlay { display: none; } .content { margin-left: 290px; max-width: calc(100% - 330px); } }
+        
+        .hamburger-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .hamburger-btn.open span:nth-child(2) { opacity: 0; }
+        .hamburger-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+        /* === ТЁМНАЯ ТЕМА === */
+        body.dark-theme { background-color: #121212; color: #e0e0e0; }
+        body.dark-theme .content { background: #1e1e1e; box-shadow: 0 4px 8px rgba(0,0,0,0.5); }
+        body.dark-theme h1 { color: #e0e0e0; }
+        .theme-toggle-btn { margin-top: auto; margin-bottom: 30px; margin-left: auto; margin-right: auto; width: 85%; background-color: #1a252f; color: white; border: 1px solid #5b9bd5; padding: 12px 15px; border-radius: 8px; cursor: pointer; font-size: 1.05em; font-weight: 500; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.15); }
+        .theme-toggle-btn:hover { background-color: #5b9bd5; transform: translateY(-2px); }
+        body.dark-theme .theme-toggle-btn { background-color: #2c3e50; border-color: #f1c40f; color: #f1c40f; }
+        body.dark-theme .theme-toggle-btn:hover { background-color: #f1c40f; color: #2c3e50; }
+
+        /* === ИНТЕРФЕЙС КАЛЬКУЛЯТОРА === */
+        .calc-container { display: flex; flex-direction: column; gap: 20px; }
+        
+        .calc-screen { background: #f8f9fa; border: 2px solid #5b9bd5; border-radius: 8px; padding: 20px; min-height: 120px; display: flex; flex-direction: column; justify-content: space-between; position: relative; }
+        body.dark-theme .calc-screen { background: #2c3e50; border-color: #34495e; }
+        
+        #input-text { width: 100%; background: transparent; border: none; font-size: 1.2em; color: #2c3e50; outline: none; margin-bottom: 10px; font-family: monospace; border-bottom: 1px dashed #ccc; padding-bottom: 5px; }
+        body.dark-theme #input-text { color: #e0e0e0; border-bottom-color: #555; }
+        
+        #math-preview { font-size: 1.2em; color: #7f8c8d; min-height: 30px; overflow-x: auto; overflow-y: hidden; white-space: nowrap; }
+        body.dark-theme #math-preview { color: #aaa; }
+
+        #math-result { font-size: 1.8em; color: #27ae60; text-align: right; min-height: 40px; overflow-x: auto; overflow-y: hidden; white-space: nowrap; font-weight: bold; margin-top: 10px; }
+        body.dark-theme #math-result { color: #2ecc71; }
+
+        .error-msg { color: #e74c3c !important; font-size: 1em !important; }
+
+        .calc-keyboard { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+        @media (max-width: 600px) { .calc-keyboard { grid-template-columns: repeat(4, 1fr); } .btn-hide-mobile { display: none; } }
+        
+        .calc-btn { background: #ecf0f1; border: 1px solid #bdc3c7; padding: 15px 5px; border-radius: 6px; font-size: 1.1em; font-weight: 600; color: #2c3e50; cursor: pointer; transition: 0.1s; text-align: center; user-select: none; }
+        .calc-btn:hover { background: #d5dbdb; }
+        .calc-btn:active { transform: scale(0.95); }
+        
+        .btn-blue { background: #5b9bd5; color: white; border-color: #4a8ac4; }
+        .btn-blue:hover { background: #4a8ac4; }
+        .btn-orange { background: #e67e22; color: white; border-color: #d35400; }
+        .btn-orange:hover { background: #d35400; }
+        .btn-red { background: #e74c3c; color: white; border-color: #c0392b; }
+        .btn-red:hover { background: #c0392b; }
+
+        body.dark-theme .calc-btn { background: #34495e; color: #ecf0f1; border-color: #2c3e50; }
+        body.dark-theme .calc-btn:hover { background: #2c3e50; }
+        body.dark-theme .btn-blue { background: #2980b9; }
+        body.dark-theme .btn-orange { background: #d35400; }
+        body.dark-theme .btn-red { background: #c0392b; }
+        
+        .instructions { background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin-top: 20px; border-radius: 4px; font-size: 0.95em; color: #856404; }
+        body.dark-theme .instructions { background: #332b18; border-color: #d4a017; color: #e0b038; }
+    </style>
+</head>
+<body>
+
+    <button class="hamburger-btn" id="hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+    </button>
+
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+    <nav class="sidebar" id="sidebar">
+        <a href="index.html">⬅ На главную</a>
+        <a href="tpand.html">Производные</a>
+        <a href="trig.html">Тригонометрия</a>
+        <a href="log.html">Логарифмы</a>
+        <a href="geom.html">Геометрические формулы</a>
+        <a href="discriminant.html">Дискриминант</a>
+        <a href="exponential.html">Показательная функция</a>
+        <a href="matrices.html">Матрицы</a>
+        <a href="integrals.html">Первообразная и Интегралы</a>
+        <a href="combinatorics.html">Комбинаторика и ТВ</a>
+        <a href="vectors.html">Векторы</a>
+        <a href="progressions.html">Прогрессии</a>
+        <a href="graphs.html">Графы и алгоритмы</a>
+        <a href="fourier_laplace.html">Фурье и Лаплас</a>
+        <a href="circuits.html">Электрические цепи</a>
+        <a href="analytic_geom.html">Аналитическая геометрия</a>
+        <a href="tabgradus.html">Таблица градусов</a>
+        <a href="calculator.html" style="background-color: #34495e; color: #5b9bd5;">Калькулятор</a>
+        
+        <button class="theme-toggle-btn" id="themeToggle" onclick="toggleTheme()">🌙</button>
+    </nav>
+
+    <div class="content">
+        <h1>Умный Калькулятор</h1>
+        
+        <div class="calc-container">
+            <div class="calc-screen">
+                <input type="text" id="input-text" placeholder="Введите выражение, например: sin(pi/4) + sqrt(16)" autocomplete="off">
+                <div id="math-preview">$$ \text{Формула появится здесь...} $$</div>
+                <div id="math-result"></div>
+            </div>
+
+            <div class="calc-keyboard">
+                <button class="calc-btn btn-blue" onclick="insert('sin(')">sin</button>
+                <button class="calc-btn btn-blue" onclick="insert('cos(')">cos</button>
+                <button class="calc-btn btn-blue" onclick="insert('tan(')">tg</button>
+                <button class="calc-btn btn-blue btn-hide-mobile" onclick="insert('cot(')">ctg</button>
+                <button class="calc-btn btn-red" onclick="clearAll()">C</button>
+
+                <button class="calc-btn btn-blue" onclick="insert('asin(')">arcsin</button>
+                <button class="calc-btn btn-blue" onclick="insert('acos(')">arccos</button>
+                <button class="calc-btn btn-blue" onclick="insert('log(')">ln</button>
+                <button class="calc-btn btn-blue btn-hide-mobile" onclick="insert('log10(')">log₁₀</button>
+                <button class="calc-btn btn-orange" onclick="backspace()">⌫</button>
+
+                <button class="calc-btn btn-blue" onclick="insert('sqrt(')">√</button>
+                <button class="calc-btn btn-blue" onclick="insert('^')">xʸ</button>
+                <button class="calc-btn btn-blue" onclick="insert('(')">(</button>
+                <button class="calc-btn btn-blue" onclick="insert(')')">)</button>
+                <button class="calc-btn btn-blue btn-hide-mobile" onclick="insert('!')">n!</button>
+
+                <button class="calc-btn btn-blue btn-hide-mobile" onclick="insert('pi')">π</button>
+                <button class="calc-btn btn-blue btn-hide-mobile" onclick="insert('e')">e</button>
+                <button class="calc-btn btn-blue btn-hide-mobile" onclick="insert('derivative(')">d/dx</button>
+                <button class="calc-btn btn-blue btn-hide-mobile" onclick="insert('det([1, 2; 3, 4])')">Det</button>
+                <button class="calc-btn btn-blue btn-hide-mobile" onclick="insert('cross([1,0,0], [0,1,0])')">Cross</button>
+
+                <button class="calc-btn" onclick="insert('7')">7</button>
+                <button class="calc-btn" onclick="insert('8')">8</button>
+                <button class="calc-btn" onclick="insert('9')">9</button>
+                <button class="calc-btn btn-orange" onclick="insert('/')">÷</button>
+                <button class="calc-btn btn-orange btn-hide-mobile" onclick="insert('*')">×</button> 
+                
+                <button class="calc-btn" onclick="insert('4')">4</button>
+                <button class="calc-btn" onclick="insert('5')">5</button>
+                <button class="calc-btn" onclick="insert('6')">6</button>
+                <button class="calc-btn btn-orange" onclick="insert('*')">×</button>
+                <button class="calc-btn btn-orange btn-hide-mobile" onclick="insert('-')">−</button>
+
+                <button class="calc-btn" onclick="insert('1')">1</button>
+                <button class="calc-btn" onclick="insert('2')">2</button>
+                <button class="calc-btn" onclick="insert('3')">3</button>
+                <button class="calc-btn btn-orange" onclick="insert('-')">−</button>
+                <button class="calc-btn btn-orange btn-hide-mobile" onclick="insert('+')">+</button>
+
+                <button class="calc-btn" onclick="insert('0')">0</button>
+                <button class="calc-btn" onclick="insert('.')">.</button>
+                <button class="calc-btn btn-orange" onclick="insert('+')">+</button>
+                <button class="calc-btn btn-red" style="grid-column: span 2;" onclick="calculate()">=</button>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <strong>💡:</strong><br>
+            - Дроби вводятся через слэш (например, <code>1/2</code>).<br>
+            - Производная: <code>derivative(x^2, x)</code><br>
+            - Определитель матрицы: <code>det([1, 2; 3, 4])</code><br>
+            - Матричное умножение работает стандартно: <code>[1, 2] * [3; 4]</code>
+        </div>
+    </div>
+
+    <script>
+        // Управление меню и темой
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('open');
+            document.getElementById('hamburger').classList.toggle('open');
+        }
+
+        const themeBtn = document.getElementById('themeToggle');
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-theme');
+            themeBtn.innerHTML = '☀️';
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            body.classList.toggle('dark-theme');
+            if (body.classList.contains('dark-theme')) {
+                localStorage.setItem('theme', 'dark');
+                themeBtn.innerHTML = '☀️';
+            } else {
+                localStorage.setItem('theme', 'light');
+                themeBtn.innerHTML = '🌙';
+            }
+        }
+
+        // Логика калькулятора
+        const inputField = document.getElementById('input-text');
+        const previewArea = document.getElementById('math-preview');
+        const resultArea = document.getElementById('math-result');
+
+        // Рендеринг формулы при каждом изменении ввода
+        inputField.addEventListener('input', updatePreview);
+        inputField.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                calculate();
+            }
+        });
+
+        function insert(text) {
+            const startPos = inputField.selectionStart;
+            const endPos = inputField.selectionEnd;
+            const currentVal = inputField.value;
+            
+            inputField.value = currentVal.substring(0, startPos) + text + currentVal.substring(endPos, currentVal.length);
+            
+            // Ставим курсор после вставленного текста
+            const newPos = startPos + text.length;
+            
+            // ИСПОЛЬЗУЕМ preventScroll, чтобы экран не прыгал
+            inputField.focus({ preventScroll: true }); 
+            inputField.setSelectionRange(newPos, newPos);
+            
+            updatePreview();
+        }
+
+        function clearAll() {
+            inputField.value = '';
+            previewArea.innerHTML = '$$ \\text{Формула появится здесь...} $$';
+            resultArea.innerHTML = '';
+            // ИСПОЛЬЗУЕМ preventScroll
+            inputField.focus({ preventScroll: true });
+        }
+
+        function backspace() {
+            const startPos = inputField.selectionStart;
+            if (startPos > 0) {
+                const currentVal = inputField.value;
+                inputField.value = currentVal.substring(0, startPos - 1) + currentVal.substring(startPos, currentVal.length);
+                
+                // ИСПОЛЬЗУЕМ preventScroll
+                inputField.focus({ preventScroll: true });
+                inputField.setSelectionRange(startPos - 1, startPos - 1);
+                updatePreview();
+            }
+        }
+
+        function updatePreview() {
+            const expr = inputField.value.trim();
+            if (!expr) {
+                previewArea.innerHTML = '$$ \\text{Формула появится здесь...} $$';
+                return;
+            }
+            try {
+                // Парсим выражение с помощью math.js и превращаем в LaTeX
+                const node = math.parse(expr);
+                const latex = node.toTex({parenthesis: 'auto'});
+                
+                // Рендерим через KaTeX
+                katex.render(latex, previewArea, {
+                    displayMode: true,
+                    throwOnError: false
+                });
+            } catch (e) {
+                // Если выражение еще не дописано (например, открыта скобка)
+                previewArea.innerHTML = '<span class="error-msg">Ожидание завершения ввода...</span>';
+            }
+        }
+
+        // Функция-перехватчик для распознавания табличных значений и красивых дробей
+        function getExactLatex(value) {
+            if (typeof value !== 'number') return null;
+            
+            const eps = 1e-10; // Погрешность для сравнения чисел с плавающей точкой
+            const absVal = Math.abs(value);
+            const sign = value < 0 ? '-' : '';
+
+            // 1. Таблица популярных точных значений (тригонометрия и Пи)
+            const exactValues = [
+                { v: 0, tex: "0" },
+                { v: 0.5, tex: "\\frac{1}{2}" },
+                { v: Math.sqrt(2)/2, tex: "\\frac{\\sqrt{2}}{2}" },
+                { v: Math.sqrt(3)/2, tex: "\\frac{\\sqrt{3}}{2}" },
+                { v: 1, tex: "1" },
+                { v: Math.sqrt(3)/3, tex: "\\frac{\\sqrt{3}}{3}" },
+                { v: Math.sqrt(3), tex: "\\sqrt{3}" },
+                { v: Math.PI, tex: "\\pi" },
+                { v: Math.PI/2, tex: "\\frac{\\pi}{2}" },
+                { v: Math.PI/3, tex: "\\frac{\\pi}{3}" },
+                { v: Math.PI/4, tex: "\\frac{\\pi}{4}" },
+                { v: Math.PI/6, tex: "\\frac{\\pi}{6}" }
+            ];
+
+            for (let exact of exactValues) {
+                if (Math.abs(absVal - exact.v) < eps) {
+                    return exact.v === 0 ? "0" : sign + exact.tex;
+                }
+            }
+
+            // 2. Если не корень из таблицы, пытаемся собрать красивую рациональную дробь
+            try {
+                const f = math.fraction(value);
+                // Фильтруем "случайные" дроби с огромными знаменателями
+                if (f.d > 1 && f.d <= 1000 && Math.abs(value - f.n/f.d) < eps) {
+                    return sign + `\\frac{${Math.abs(f.n)}}{${f.d}}`;
+                }
+            } catch(e) {}
+
+            // Если ничего не подошло, возвращаем null, чтобы сработал стандартный вывод
+            return null; 
+        }
+
+        function calculate() {
+            const expr = inputField.value.trim();
+            if (!expr) return;
+            
+            try {
+                // Вычисляем результат
+                const result = math.evaluate(expr);
+                
+                // Форматируем результат
+                let resultLatex = '';
+                
+                if (typeof result === 'function') {
+                    resultLatex = '\\text{Функция}';
+                } else if (typeof result === 'number') {
+                    // Пытаемся получить точное значение (дроби, корни)
+                    const exact = getExactLatex(result);
+                    const approx = math.parse(math.format(result, {precision: 14})).toTex();
+                    
+                    if (exact) {
+                        // Если число содержит корень или Пи, круто показать и примерное значение
+                        if (exact.includes('sqrt') || exact.includes('pi')) {
+                            resultLatex = exact + ' \\approx ' + math.format(result, {precision: 5});
+                        } else {
+                            resultLatex = exact; 
+                        }
+                    } else {
+                        resultLatex = approx; // Фолбэк на стандартный вывод
+                    }
+                } else {
+                    // Конвертируем ответ (матрицу, вектор) обратно в LaTeX
+                    const resNode = math.parse(math.format(result, {precision: 14}));
+                    resultLatex = resNode.toTex();
+                }
+
+                katex.render('= ' + resultLatex, resultArea, {
+                    displayMode: true,
+                    throwOnError: false
+                });
+            } catch (e) {
+                resultArea.innerHTML = '<span class="error-msg">Ошибка вычисления. Проверьте синтаксис.</span>';
+            }
+        }
+    </script>
+</body>
+</html>

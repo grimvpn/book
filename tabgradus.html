@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Таблица градусов | Математика</title>
+
+    <meta property="og:title" content="Справочник" />
+    <meta property="og:description" content="Геометрическая таблица градусов: синусы, косинусы, тангенсы и котангенсы" />
+    <meta property="og:image" content="https://grimvpn.github.io/book/bookpreview.png" />
+    <meta property="og:url" content="https://grimvpn.github.io/book/" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    
+    <link rel="stylesheet" href="./katex/katex.min.css">
+    <script defer src="./katex/katex.min.js"></script>
+    <script defer src="./katex/contrib/auto-render.min.js" onload="renderMath()"></script>
+    <script>
+        function renderMath() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '\\(', right: '\\)', display: false},
+                    {left: '\\[', right: '\\]', display: true},
+                    {left: '$', right: '$', display: false}
+                ],
+                throwOnError : false
+            });
+        }
+    </script>
+    
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 0; overflow-x: hidden; }
+        .hamburger-btn { position: fixed; top: 20px; left: 20px; background: #2c3e50; color: white; border: none; border-radius: 8px; padding: 12px; cursor: pointer; z-index: 1000; display: flex; flex-direction: column; gap: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .hamburger-btn span { display: block; width: 25px; height: 3px; background-color: white; transition: 0.2s; }
+        
+        /* === НАСТРОЙКИ БОКОВОГО МЕНЮ === */
+        .sidebar { position: fixed; top: 0; left: -260px; width: 260px; height: 100%; background-color: #2c3e50; padding-top: 80px; transition: left 0.2s ease-in-out; z-index: 999; box-shadow: 2px 0 10px rgba(0,0,0,0.2); display: flex; flex-direction: column; box-sizing: border-box; overflow-y: auto; }
+        .sidebar.open { left: 0; }
+        
+        .sidebar a { display: block; color: white; padding: 15px 25px; text-decoration: none; font-size: 1.1em; border-bottom: 1px solid #34495e; transition: 0.2s; flex-shrink: 0; }
+        .sidebar a:hover { background-color: #34495e; padding-left: 32px; color: #5b9bd5; }
+        
+        .sidebar::-webkit-scrollbar { width: 5px; }
+        .sidebar::-webkit-scrollbar-track { background: #2c3e50; }
+        .sidebar::-webkit-scrollbar-thumb { background: #5b9bd5; border-radius: 10px; }
+
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); opacity: 0; visibility: hidden; transition: 0.2s; z-index: 998; }
+        .overlay.open { opacity: 1; visibility: visible; }
+        .content { max-width: 900px; margin: 80px auto 40px; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); transition: margin-left 0.2s ease-in-out; }
+        h1 { text-align: center; color: #2c3e50; }
+        
+        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 20px; }
+        table { width: 100%; border-collapse: collapse; text-align: center; font-size: 1.1em; min-width: 600px; }
+        th { background-color: #5b9bd5; color: white; border: 2px solid white; padding: 12px; }
+        td { background-color: #faebd7; border: 2px solid white; padding: 12px; color: #000; vertical-align: middle; }
+        
+        @media (max-width: 768px) {
+            .content { padding: 15px; }
+            table { font-size: 1em; }
+            th, td { padding: 8px; }
+        }
+
+        @media (min-width: 992px) { .hamburger-btn { display: none; } .sidebar { left: 0; } .overlay { display: none; } .content { margin-left: 290px; max-width: calc(100% - 330px); } }
+        .hamburger-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .hamburger-btn.open span:nth-child(2) { opacity: 0; }
+        .hamburger-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+        /* === ТЁМНАЯ ТЕМА === */
+        body.dark-theme { background-color: #121212; color: #e0e0e0; }
+        body.dark-theme .content { background: #1e1e1e; box-shadow: 0 4px 8px rgba(0,0,0,0.5); }
+        body.dark-theme h1 { color: #e0e0e0; }
+        body.dark-theme td { background-color: #2c2c2c; color: #e0e0e0; border-color: #1e1e1e; }
+        body.dark-theme th { background-color: #1f4e79; border-color: #1e1e1e; }
+
+        /* === КНОПКА В МЕНЮ === */
+        .theme-toggle-btn { margin: 30px auto; width: 85%; background-color: #1a252f; color: white; border: 1px solid #5b9bd5; padding: 12px 15px; border-radius: 8px; cursor: pointer; font-size: 1.05em; font-weight: 500; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.15); flex-shrink: 0; }
+        .theme-toggle-btn:hover { background-color: #5b9bd5; transform: translateY(-2px); box-shadow: 0 6px 8px rgba(0,0,0,0.2); }
+        body.dark-theme .theme-toggle-btn { background-color: #2c3e50; border-color: #f1c40f; color: #f1c40f; }
+        body.dark-theme .theme-toggle-btn:hover { background-color: #f1c40f; color: #2c3e50; }
+    </style>
+</head>
+<body>
+
+    <button class="hamburger-btn" id="hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+    </button>
+
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+    <nav class="sidebar" id="sidebar">
+        <a href="index.html">⬅ На главную</a>
+        <a href="tpand.html">Производные</a>
+        <a href="trig.html">Тригонометрия</a>
+        <a href="log.html">Логарифмы</a>
+        <a href="geom.html">Геометрические формулы</a>
+        <a href="discriminant.html">Дискриминант</a>
+        <a href="exponential.html">Показательная функция</a>
+        <a href="matrices.html">Матрицы</a>
+        <a href="integrals.html">Первообразная и Интегралы</a>
+        <a href="combinatorics.html">Комбинаторика и ТВ</a>
+        <a href="vectors.html">Векторы</a>
+        <a href="progressions.html">Прогрессии</a>
+        <a href="graphs.html">Графы и алгоритмы</a>
+        <a href="fourier_laplace.html">Фурье и Лаплас</a>
+        <a href="circuits.html">Электрические цепи</a>
+        <a href="analytic_geom.html">Аналитическая геометрия</a>
+      <a href="degrees.html" style="background-color: #34495e; color: #5b9bd5;">Таблица градусов</a>
+        <a href="calculator.html">Калькулятор</a>
+
+        <button class="theme-toggle-btn" id="themeToggle" onclick="toggleTheme()">🌙</button>
+    </nav>
+
+    <div class="content">
+        <h1>Геометрическая таблица градусов</h1>
+        
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 15%">Угол \( \alpha^\circ \)</th>
+                        <th style="width: 15%">Угол \( \text{рад} \)</th>
+                        <th style="width: 17.5%">\( \sin \alpha \)</th>
+                        <th style="width: 17.5%">\( \cos \alpha \)</th>
+                        <th style="width: 17.5%">\( \text{tg } \alpha \)</th>
+                        <th style="width: 17.5%">\( \text{ctg } \alpha \)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>$$ 0^\circ $$</td>
+                        <td>$$ 0 $$</td>
+                        <td>$$ 0 $$</td>
+                        <td>$$ 1 $$</td>
+                        <td>$$ 0 $$</td>
+                        <td>—</td>
+                    </tr>
+                    <tr>
+                        <td>$$ 30^\circ $$</td>
+                        <td>$$ \frac{\pi}{6} $$</td>
+                        <td>$$ \frac{1}{2} $$</td>
+                        <td>$$ \frac{\sqrt{3}}{2} $$</td>
+                        <td>$$ \frac{\sqrt{3}}{3} $$</td>
+                        <td>$$ \sqrt{3} $$</td>
+                    </tr>
+                    <tr>
+                        <td>$$ 45^\circ $$</td>
+                        <td>$$ \frac{\pi}{4} $$</td>
+                        <td>$$ \frac{\sqrt{2}}{2} $$</td>
+                        <td>$$ \frac{\sqrt{2}}{2} $$</td>
+                        <td>$$ 1 $$</td>
+                        <td>$$ 1 $$</td>
+                    </tr>
+                    <tr>
+                        <td>$$ 60^\circ $$</td>
+                        <td>$$ \frac{\pi}{3} $$</td>
+                        <td>$$ \frac{\sqrt{3}}{2} $$</td>
+                        <td>$$ \frac{1}{2} $$</td>
+                        <td>$$ \sqrt{3} $$</td>
+                        <td>$$ \frac{\sqrt{3}}{3} $$</td>
+                    </tr>
+                    <tr>
+                        <td>$$ 90^\circ $$</td>
+                        <td>$$ \frac{\pi}{2} $$</td>
+                        <td>$$ 1 $$</td>
+                        <td>$$ 0 $$</td>
+                        <td>—</td>
+                        <td>$$ 0 $$</td>
+                    </tr>
+                    <tr>
+                        <td>$$ 120^\circ $$</td>
+                        <td>$$ \frac{2\pi}{3} $$</td>
+                        <td>$$ \frac{\sqrt{3}}{2} $$</td>
+                        <td>$$ -\frac{1}{2} $$</td>
+                        <td>$$ -\sqrt{3} $$</td>
+                        <td>$$ -\frac{\sqrt{3}}{3} $$</td>
+                    </tr>
+                    <tr>
+                        <td>$$ 135^\circ $$</td>
+                        <td>$$ \frac{3\pi}{4} $$</td>
+                        <td>$$ \frac{\sqrt{2}}{2} $$</td>
+                        <td>$$ -\frac{\sqrt{2}}{2} $$</td>
+                        <td>$$ -1 $$</td>
+                        <td>$$ -1 $$</td>
+                    </tr>
+                    <tr>
+                        <td>$$ 150^\circ $$</td>
+                        <td>$$ \frac{5\pi}{6} $$</td>
+                        <td>$$ \frac{1}{2} $$</td>
+                        <td>$$ -\frac{\sqrt{3}}{2} $$</td>
+                        <td>$$ -\frac{\sqrt{3}}{3} $$</td>
+                        <td>$$ -\sqrt{3} $$</td>
+                    </tr>
+                    <tr>
+                        <td>$$ 180^\circ $$</td>
+                        <td>$$ \pi $$</td>
+                        <td>$$ 0 $$</td>
+                        <td>$$ -1 $$</td>
+                        <td>$$ 0 $$</td>
+                        <td>—</td>
+                    </tr>
+                    <tr>
+                        <td>$$ 270^\circ $$</td>
+                        <td>$$ \frac{3\pi}{2} $$</td>
+                        <td>$$ -1 $$</td>
+                        <td>$$ 0 $$</td>
+                        <td>—</td>
+                        <td>$$ 0 $$</td>
+                    </tr>
+                    <tr>
+                        <td>$$ 360^\circ $$</td>
+                        <td>$$ 2\pi $$</td>
+                        <td>$$ 0 $$</td>
+                        <td>$$ 1 $$</td>
+                        <td>$$ 0 $$</td>
+                        <td>—</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('open');
+            document.getElementById('hamburger').classList.toggle('open');
+        }
+
+        const themeBtn = document.getElementById('themeToggle');
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-theme');
+            themeBtn.innerHTML = '☀️';
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            body.classList.toggle('dark-theme');
+            if (body.classList.contains('dark-theme')) {
+                localStorage.setItem('theme', 'dark');
+                themeBtn.innerHTML = '☀️';
+            } else {
+                localStorage.setItem('theme', 'light');
+                themeBtn.innerHTML = '🌙';
+            }
+        }
+    </script>
+</body>
+</html>
